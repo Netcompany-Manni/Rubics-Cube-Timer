@@ -12,7 +12,9 @@ constructor(props){
   super();
   this.state = {
     timerIsRunning : false,
-    timerValue : 0
+    timerStartValue: 0,
+    timerValue : 0,
+    listOfResults : []
   }
   this.handlekeyPress.bind(this);
   
@@ -24,6 +26,8 @@ constructor(props){
   })
 }
 
+
+
 startTimer(){
 
   this.setState({timerValue : 0})
@@ -34,10 +38,10 @@ startTimer(){
 }
 
 
-
 stopTimer() {
   clearInterval(this.timer);
   {/* Legge til resultatene i et array som vises*/}
+  this.addResultToList();
 }
 
 toggleTimer = () =>{
@@ -57,9 +61,6 @@ toggleTimer = () =>{
 }
 
 handlekeyPress = (e) =>{
-
-
-
   e.preventDefault();
   if(e.key == ' '){ {/* Found solution for this at https://github.com/facebook/react/issues/5809*/}
     console.log('Space pressed');
@@ -70,14 +71,28 @@ handlekeyPress = (e) =>{
   }
 }
 
+addResultToList = () =>{
+  this.setState({ listOfResults: this.state.listOfResults.concat(this.getTimeSpentBetweenStartAndTime()) }) 
+  {/* Will add a number to the array, which is amount of time spent. Can be fixed to work with milliseconds? */}
+}
+
+getTimeSpentBetweenStartAndTime = () =>{
+  if(!this.state.timerIsRunning){ {/* If the timer is not running, we can get the time. */}
+  return this.state.timerValue - this.state.timerStartValue;
+  }
+  else{
+    console.log('You can not get the time, while the timer is running fam');
+  }
+}
+
   render() {
     return (
       <div className="App" onKeyUp={this.handlekeyPress.bind(this)} tabIndex="0"> {/* Found solution with tabIndex at https://stackoverflow.com/questions/43503964/onkeydown-event-not-working-on-divs-in-react*/}
      
-        <OverskriftComponent text="Velkommen!"></OverskriftComponent>
+        <OverskriftComponent text="Velkommen!" isRunning={this.state.timerIsRunning}></OverskriftComponent>
         <br></br>
       <TimerComponent text="kldjas" timervalue={this.state.timerValue}></TimerComponent>
-      <ResultsComponent></ResultsComponent>
+      <ResultsComponent listOfResults={this.state.listOfResults}></ResultsComponent>
       </div>
     );
   }

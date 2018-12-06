@@ -1,6 +1,6 @@
 import React from 'react';
 import '../style/ResultsComponentStyling.css';
-
+import SingleResultComponent from  './SingleResultComponent.js';
 class ResultsComponent extends React.Component{
 
     constructor(props){
@@ -10,12 +10,16 @@ class ResultsComponent extends React.Component{
         }
     }
 
-
     render(){
-        return(
-            <div>
-                <p>Her kommer resultatene</p>
-            </div>
+        return (
+            <div id="result_component_list">
+                {this.props.listOfResults.map((singleResult, index)=>{
+                    return <div> 
+                        <SingleResultComponent tekst={singleResult}></SingleResultComponent>
+                         
+                    </div>
+                })}
+             </div>
         )
     }
 
